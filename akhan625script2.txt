@@ -1,0 +1,87 @@
+-- Asad Khan script2
+
+-- Make sure connected to the database
+USE akhan625assign2db;
+
+-- Show table was empty then load data from text file into 'patient' table
+SELECT * FROM patient;
+LOAD DATA LOCAL INFILE '/home/centos/assignment2/loaddatafall2019.txt' INTO TABLE patient FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+-- insert myself as a patient into 'patient' table then show table again
+INSERT INTO patient(OHIP, firstname, lastname) VALUES('555444555', 'Asad', 'Khan');
+SELECT * FROM patient;
+
+-- Show 'doctor' table was empty then load data into it 
+SELECT * FROM doctor;
+
+INSERT INTO doctor(firstname, lastname, license, licensedate,specialty) VALUES('Bernie', 'Kavorikian', 'RD34', '1980-09-09', 'Urologist');
+INSERT INTO doctor(firstname, lastname, license, licensedate, specialty) VALUES('Joey', 'Shabado', 'GD56', '1960-06-24', 'Podiatrist');
+INSERT INTO doctor(firstname, lastname, license, licensedate, specialty) VALUES('Ross', 'Clooney', 'HT45', '1987-06-20', 'Surgeon');
+INSERT INTO doctor(firstname, lastname, license, licensedate, specialty) VALUES('Ben', 'Spock', 'YT67', '1955-02-20', 'Pediatrician');
+INSERT INTO doctor(firstname, lastname, license, licensedate, specialty) VALUES('Mandy', 'Webster', 'JK78', '1990-08-08', 'Surgeon');
+INSERT INTO doctor(firstname, lastname, license, licensedate, specialty) VALUES('Colleen', 'Aziz', 'SE66', '1989-08-24', 'Surgeon');
+INSERT INTO doctor(firstname, lastname, license, licensedate, specialty) VALUES('Doctor', 'Doom', 'EV17', '1999-12-28', 'Villain');
+
+-- Show 'doctor' table with inserts
+SELECT * FROM doctor;
+
+-- Show 'hospital' table was empty then load data into it 
+SELECT * FROM hospital;
+
+INSERT INTO hospital(name, city, province, numofbeds, code, head, headstartdate) VALUES('St.Joseph', 'London', 'On', 1000, 'BBC', 'GD56', '1999-09-10');
+INSERT INTO hospital(name, city, province, numofbeds, code, head, headstartdate) VALUES('Victoria', 'London', 'On', 1600, 'ABC', 'SE66', '1994-12-05');
+INSERT INTO hospital(name, city, province, numofbeds, code, head, headstartdate) VALUES('Victoria', 'Victoria', 'BC', 1200, 'DDE', 'YT67', '1997-12-07');
+
+-- Show 'hospital table' with inserts
+SELECT * FROM hospital;
+
+-- Show 'treats' table was empty then load data into it (*which doctors treat which patients*)
+SELECT * FROM treats;
+
+INSERT INTO treats(OHIP, license) VALUES('110112113', 'GD56');
+INSERT INTO treats(OHIP, license) VALUES('444555666', 'HT45');
+INSERT INTO treats(OHIP, license) VALUES('444555666', 'JK78');
+INSERT INTO treats(OHIP, license) VALUES('111222333', 'SE66');
+INSERT INTO treats(OHIP, license) VALUES('111222333', 'YT67');
+INSERT INTO treats(OHIP, license) VALUES('111222333', 'JK78');
+INSERT INTO treats(OHIP, license) VALUES('333444555', 'GD56');
+INSERT INTO treats(OHIP, license) VALUES('667766777', 'YT67');
+INSERT INTO treats(OHIP, license) VALUES('667766777', 'JK78');
+INSERT INTO treats(OHIP, license) VALUES('667766777', 'GD56');
+INSERT INTO treats(OHIP, license) VALUES('111222111', 'YT67');
+INSERT INTO treats(OHIP, license) VALUES('555444555', 'EV17');
+
+-- Show 'treats' table with inserts
+SELECT * FROM treats;
+
+-- Show 'doctor' table before updates
+SELECT * FROM doctor;
+
+-- Update the 'workoutof' data for the doctor table
+UPDATE doctor SET workoutof = 'BBC' WHERE license = 'RD34';
+UPDATE doctor SET workoutof = 'BBC' WHERE license = 'GD56';
+UPDATE doctor SET workoutof = 'BBC' WHERE license = 'JK78';
+UPDATE doctor SET workoutof = 'DDE' WHERE license = 'HT45';
+UPDATE doctor SET workoutof = 'DDE' WHERE license = 'YT67';
+UPDATE doctor SET workoutof = 'ABC' WHERE license = 'SE66';
+UPDATE doctor SET workoutof = 'ABC' WHERE license = 'EV17';
+
+-- Show 'doctor' table with updates
+SELECT * FROM doctor;
+
+-- Show 'patient' table before update
+SELECT * FROM patient;
+
+-- Update the patient data
+UPDATE patient SET lastname = 'Brown' WHERE OHIP = 111222111;
+
+-- Show 'patient' table with update
+SELECT * FROM patient;
+
+-- Show 'treats' table before update
+SELECT * FROM treats;
+
+UPDATE treats SET license = (SELECT DISTINCT license FROM doctor WHERE lastname = 'Clooney') WHERE license = (SELECT DISTINCT license FROM doctor WHERE lastname = 'Spock');
+
+-- Show 'treats' table with table
+SELECT * FROM treats;

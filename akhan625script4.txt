@@ -1,0 +1,38 @@
+-- Asad Khan script 4
+
+-- Connect to the databae
+USE akhan625assign2db;
+
+-- Show 'doctor' table before delete
+SELECT * FROM doctor;
+
+-- Delete any doctor who got their license before Jan 1, 1965
+DELETE FROM doctor WHERE licensedate < '1965-01-01';
+
+-- Show 'doctor' table after delete
+SELECT * FROM doctor;
+
+SELECT "The delete causes an error since all the doctors' licenses are referenced by the tables 'treats' and 'hospital'";
+
+-- Create view that shows all patients first names and last names who are treated by the heads of hospitals, that were made heads after Dec 31, 1995. 
+-- Also display the doctor's last name and the hospital name
+
+CREATE VIEW  patientheads AS SELECT patient.firstname, patient.lastname, doctor.lastname AS DoctorLastName, hospital.name AS HospitalName FROM patient, treats, hospital, doctor WHERE patient.OHIP = treats.OHIP AND treats.license = hospital.head AND hospital.headstartdate > '1995-12-31' AND doctor.license = hospital.head; 
+
+-- Show 'patientheads' to prove the view works
+SELECT * FROM patientheads;
+
+-- Show all the data in the 'doctor' table and show the data in the 'treats' table
+SELECT * FROM doctor;
+SELECT * FROM treats;
+
+-- Delete the doctor with last name of clooney
+DELETE FROM doctor WHERE lastname = 'Clooney';
+
+-- Show the 'doctor' table to show that the delete worked
+SELECT * FROM doctor;
+
+-- Try to Delete all the Surgeons 
+DELETE FROM doctor WHERE specialty = 'Surgeon';
+
+--- the delete command did not delete the rows because the doctor 'Collen Aziz' is a head of a hospital and thus a foreign key in another table. So it wasn't possible
